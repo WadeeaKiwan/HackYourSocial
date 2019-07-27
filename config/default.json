@@ -1,3 +1,4 @@
 {
-  "mongoURI": "mongodb+srv://wadeea85:wadeea85@hackyoursocial-ozadm.mongodb.net/test?retryWrites=true&w=majority"
+  "mongoURI": "mongodb+srv://wadeea85:wadeea85@hackyoursocial-ozadm.mongodb.net/test?retryWrites=true&w=majority",
+  "jwtSecret": "mysecrettoken"
 }
