@@ -1,6 +1,0 @@
-{
-  "mongoURI": "mongodb+srv://wadeea85:wadeea85@hackyoursocial-ozadm.mongodb.net/test?retryWrites=true&w=majority",
-  "jwtSecret": "mysecrettoken",
-  "githubClientId": "c219f81b8b8d86cf33a3",
-  "githubSecret": "941572d685beadae2e506664bb88fd09ac6ed4a5"
-}
