@@ -55,6 +55,8 @@ const checkText = [
     .isEmpty(),
 ];
 
+const checkEmail = [check('email', 'Please include a valid email').isEmail()];
+
 module.exports = {
   checkLogin,
   checkRegister,
@@ -62,4 +64,5 @@ module.exports = {
   checkExperience,
   checkEducation,
   checkText,
+  checkEmail,
 };

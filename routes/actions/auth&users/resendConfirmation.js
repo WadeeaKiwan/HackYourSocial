@@ -1,45 +1,26 @@
-const gravatar = require('gravatar');
-const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require('config');
+
 const { validationResult } = require('express-validator');
+
 const { sendEmail } = require('../../../middleware/mailer');
 
 const User = require('../../../models/User');
 
-const registerUser = async (req, res) => {
+const resendConfirmation = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { name, email, password } = req.body;
+  const { email } = req.body;
 
   try {
     let user = await User.findOne({ email });
-
-    if (user) {
-      return res.status(400).json({ errors: [{ msg: 'User already exists' }] });
+    console.log('user', user);
+    if (!user) {
+      return res.status(400).json({ errors: [{ msg: 'User not found' }] });
     }
-
-    const avatar = gravatar.url(email, {
-      s: '200',
-      r: 'pg',
-      d: 'mm',
-    });
-
-    user = new User({
-      name,
-      email,
-      password,
-      avatar,
-    });
-
-    const salt = await bcrypt.genSalt(10);
-
-    user.password = await bcrypt.hash(password, salt);
-
-    await user.save();
 
     const payload = {
       user: {
@@ -47,8 +28,8 @@ const registerUser = async (req, res) => {
       },
     };
 
-    const token = await jwt.sign(payload, config.get('jwtSecret'));
-
+    const token = await jwt.sign(payload, config.get('jwtSecret'), { expiresIn: '1h' });
+    console.log('token', token);
     // Check if not token
     if (!token) {
       return res.status(401).json({ msg: 'No token, authorization denied' });
@@ -58,13 +39,11 @@ const registerUser = async (req, res) => {
     const html = `
           Hi ${name},
           <br/><br/>
-          Thanks for your registration!
-          <br/><br/>
-          Please verify your account by clicking the following link:
+          Please verify your account by clicking: 
           <a href="http://localhost:3000/verify/${token}">Here</a>
           <br/><br/>
           Thanks, Hack Your Social Team
-    `;
+          `;
 
     // Send the email
     await sendEmail(
@@ -74,11 +53,14 @@ const registerUser = async (req, res) => {
       html,
     );
 
-    res.json({ msg: 'You are registered! Please, visit your email to confirm your account' });
+    res.json({ msg: 'Please, visit your email to confirm your account' });
   } catch (err) {
     console.error(err.message);
-    res.status(500).json({ msg: 'Server error' });
+    if (err.kind === 'ObjectId') {
+      return res.status(404).json({ msg: 'User not found' });
+    }
+    res.status(500).json({ msg: err.message });
   }
 };
 
-module.exports = registerUser;
+module.exports = resendConfirmation;
