@@ -16,8 +16,8 @@ const resendConfirmation = async (req, res) => {
   const { email } = req.body;
 
   try {
-    let user = await User.findOne({ email });
-    console.log('user', user);
+    const user = await User.findOne({ email });
+
     if (!user) {
       return res.status(400).json({ errors: [{ msg: 'User not found' }] });
     }
@@ -29,7 +29,7 @@ const resendConfirmation = async (req, res) => {
     };
 
     const token = await jwt.sign(payload, config.get('jwtSecret'), { expiresIn: '1h' });
-    console.log('token', token);
+
     // Check if not token
     if (!token) {
       return res.status(401).json({ msg: 'No token, authorization denied' });
@@ -37,7 +37,7 @@ const resendConfirmation = async (req, res) => {
 
     // Email body
     const html = `
-          Hi ${name},
+          Hi ${user.name},
           <br/><br/>
           Please verify your account by clicking: 
           <a href="http://localhost:3000/verify/${token}">Here</a>

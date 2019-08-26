@@ -43,7 +43,10 @@ const emailConfirmation = async (req, res) => {
     if (err.kind === 'ObjectId') {
       return res.status(404).json({ msg: 'User not found' });
     }
-    res.status(500).json({ msg: 'Server error' });
+    // if (err.name == 'jwt expired') {
+    //   return res.status(404).json({ msg: 'Activation link has expired!' });
+    // }
+    res.status(500).json({ msg: 'Server Error' });
   }
 };
 

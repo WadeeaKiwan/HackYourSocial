@@ -46,9 +46,10 @@ const registerUser = async (req, res) => {
         id: user.id,
       },
     };
-
+    console.log('payload', payload);
     const token = await jwt.sign(payload, config.get('jwtSecret'));
-
+    console.log('token', token);
+    console.log('type of token', typeof token);
     // Check if not token
     if (!token) {
       return res.status(401).json({ msg: 'No token, authorization denied' });
