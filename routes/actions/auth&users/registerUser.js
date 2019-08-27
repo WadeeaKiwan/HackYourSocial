@@ -62,7 +62,7 @@ const registerUser = async (req, res) => {
           Thanks for your registration!
           <br/><br/>
           Please verify your account by clicking the following link:
-          <a href="http://localhost:3000/verify/${token}">Here</a>
+          <a href="https://confirm-email.herokuapp.com/verify/${token}">Here</a>
           <br/><br/>
           Thanks, Hack Your Social Team
     `;

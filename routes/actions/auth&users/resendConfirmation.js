@@ -40,7 +40,7 @@ const resendConfirmation = async (req, res) => {
           Hi ${user.name},
           <br/><br/>
           Please verify your account by clicking: 
-          <a href="http://localhost:3000/verify/${token}">Here</a>
+          <a href="https://confirm-email.herokuapp.com/verify/${token}">Here</a>
           <br/><br/>
           Thanks, Hack Your Social Team
           `;
