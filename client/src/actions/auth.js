@@ -9,6 +9,10 @@ import {
   LOGIN_FAIL,
   CLEAR_PROFILE,
   LOGOUT,
+  ACCOUNT_CONFIRMED,
+  ACCOUNT_NOT_CONFIRMED,
+  RESEND_CONFIRMATION,
+  RESEND_CONFIRMATION_FAIL,
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 
@@ -50,7 +54,7 @@ export const register = ({ name, email, password }) => async dispatch => {
       payload: res.data,
     });
 
-    dispatch(loadUser());
+    dispatch(setAlert(res.data.msg, 'success'));
   } catch (err) {
     const errors = err.response.data.errors;
 
@@ -60,6 +64,68 @@ export const register = ({ name, email, password }) => async dispatch => {
 
     dispatch({
       type: REGISTER_FAIL,
+    });
+  }
+};
+
+// Confirm User
+export const confirmAccount = verifyToken => async dispatch => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  const body = JSON.stringify({ verifyToken });
+
+  try {
+    const res = await axios.post(`/api/users/verify/${verifyToken}`, body, config);
+
+    dispatch({
+      type: ACCOUNT_CONFIRMED,
+      payload: res.data,
+    });
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    if (errors) {
+      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+    }
+
+    dispatch({
+      type: ACCOUNT_NOT_CONFIRMED,
+    });
+  }
+};
+
+// Resend Confirmation
+export const resendConfirmation = email => async dispatch => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  const body = JSON.stringify({ email });
+
+  try {
+    const res = await axios.put('/api/users/verify/resend', body, config);
+
+    dispatch({
+      type: RESEND_CONFIRMATION,
+      payload: res.data,
+    });
+
+    dispatch(setAlert(res.data.msg, 'success'));
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    if (errors) {
+      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+    }
+
+    dispatch({
+      type: RESEND_CONFIRMATION_FAIL,
     });
   }
 };

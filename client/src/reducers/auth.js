@@ -7,11 +7,16 @@ import {
   LOGIN_FAIL,
   LOGOUT,
   ACCOUNT_DELETED,
+  ACCOUNT_CONFIRMED,
+  ACCOUNT_NOT_CONFIRMED,
+  RESEND_CONFIRMATION,
+  RESEND_CONFIRMATION_FAIL,
 } from '../actions/types';
 
 const initialState = {
   token: localStorage.getItem('token'),
   isAuthenticated: null,
+  active: false,
   loading: true,
   user: null,
 };
@@ -28,6 +33,29 @@ export default function(state = initialState, action) {
         user: payload,
       };
     case REGISTER_SUCCESS:
+    case RESEND_CONFIRMATION:
+      return {
+        ...state,
+        payload,
+        isAuthenticated: false,
+        loading: false,
+        active: false,
+      };
+    case ACCOUNT_CONFIRMED:
+      return {
+        ...state,
+        ...payload,
+        isAuthenticated: false,
+        loading: false,
+        active: true,
+      };
+    case ACCOUNT_NOT_CONFIRMED:
+      return {
+        ...state,
+        isAuthenticated: false,
+        loading: false,
+        active: false,
+      };
     case LOGIN_SUCCESS:
       localStorage.setItem('token', payload.token);
       return {
@@ -41,6 +69,7 @@ export default function(state = initialState, action) {
     case LOGIN_FAIL:
     case LOGOUT:
     case ACCOUNT_DELETED:
+    case RESEND_CONFIRMATION_FAIL:
       localStorage.removeItem('token');
       return {
         ...state,

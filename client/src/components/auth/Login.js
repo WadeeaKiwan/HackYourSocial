@@ -2,13 +2,16 @@ import React, { Fragment, useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { login } from '../../actions/auth';
+import { login, resendConfirmation } from '../../actions/auth';
 
-const Login = ({ login, isAuthenticated }) => {
+const Login = ({ login, resendConfirmation, isAuthenticated }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
+
+  const [emailData, setEmailData] = useState('');
+  const [displayResend, toggleResend] = useState(false);
 
   const { email, password } = formData;
 
@@ -22,6 +25,8 @@ const Login = ({ login, isAuthenticated }) => {
   if (isAuthenticated) {
     return <Redirect to='/dashboard' />;
   }
+
+  const onEmailChange = e => setEmailData(([e.target.name] = e.target.value));
 
   return (
     <Fragment>
@@ -55,12 +60,41 @@ const Login = ({ login, isAuthenticated }) => {
       <p className='my-1'>
         Don't have an account? <Link to='/register'>Sign Up</Link>
       </p>
+      <p className='my-1'>
+        Didn't receive a confirmation link?{' '}
+        {!displayResend && <Link onClick={() => toggleResend(!displayResend)}>Resend</Link>}
+      </p>
+
+      {displayResend && (
+        <form
+          className='form my-1'
+          onSubmit={e => {
+            e.preventDefault();
+            resendConfirmation(emailData);
+            setEmailData('');
+          }}
+        >
+          <input
+            type='email'
+            placeholder='Email Address'
+            name='emailData'
+            value={emailData}
+            onChange={e => onEmailChange(e)}
+            required
+          />
+          <input type='submit' className='btn btn-primary my-1' value='Resend' />
+          <button onClick={() => toggleResend(false)} className='btn btn-light my-1'>
+            Cancel
+          </button>
+        </form>
+      )}
     </Fragment>
   );
 };
 
 Login.propTypes = {
   login: PropTypes.func.isRequired,
+  resendConfirmation: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
 };
 
@@ -70,5 +104,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { login },
+  { login, resendConfirmation },
 )(Login);

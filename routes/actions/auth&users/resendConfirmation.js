@@ -53,7 +53,7 @@ const resendConfirmation = async (req, res) => {
       html,
     );
 
-    res.json({ msg: 'Please, visit your email to confirm your account' });
+    res.json({ msg: 'A new confirmation link has been sent. Please, check your email' });
   } catch (err) {
     console.error(err.message);
     if (err.kind === 'ObjectId') {
