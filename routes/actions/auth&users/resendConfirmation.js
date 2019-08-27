@@ -22,6 +22,12 @@ const resendConfirmation = async (req, res) => {
       return res.status(400).json({ errors: [{ msg: 'User not found' }] });
     }
 
+    if (user.active) {
+      return res
+        .status(400)
+        .json({ errors: [{ msg: 'Your account has been already confirmed!' }] });
+    }
+
     const payload = {
       user: {
         id: user.id,
