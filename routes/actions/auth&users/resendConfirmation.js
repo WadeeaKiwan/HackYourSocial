@@ -74,7 +74,7 @@ const resendConfirmation = async (req, res) => {
               Hi ${user.name},
             </h1>
             <p class="p lead">Please verify your account by clicking: 
-              <a href="https://confirm-email.herokuapp.com//verify/${token}">
+              <a href="https://confirm-email.herokuapp.com/verify/${token}">
                 Here
               </a>
             </p>

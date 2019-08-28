@@ -90,7 +90,7 @@ const registerUser = async (req, res) => {
               Thanks for your registration!
             </p>
             <p class="p lead">Please verify your account by clicking: 
-              <a href="https://confirm-email.herokuapp.com//verify/${token}">
+              <a href="https://confirm-email.herokuapp.com/verify/${token}">
                 Here
               </a>
             </p>
