@@ -22,12 +22,44 @@ const emailConfirmation = async (req, res) => {
 
     // Email body
     const html = `
+        <style>
+          .container {
+            margin: auto;
+            overflow: hidden;
+            padding: 0 2rem;
+            font-family: 'Comic Sans MS', sans-serif;
+            font-size: 1rem;
+            line-height: 1.6;
+          }
+          .large {
+            font-size: 2rem;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            color: blue;
+          }
+          .p {
+            padding: 0.5rem;
+          }
+          .my-1 {
+            margin: 1rem 0;
+          }
+          .lead {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+          }
+        </style>
+        <body class="container">
+          <h1>
             Hi ${user.name},
-            <br/><br/>
+          </h1>
+          <p class="p large">
             Your account has been confirmed!
-            <br/><br/>
+          </p>
+          <p class="p lead">
             Thanks, Hack Your Social Team
-            `;
+          </p>
+        </body>
+    `;
 
     // Send the email
     await sendEmail(
@@ -37,15 +69,17 @@ const emailConfirmation = async (req, res) => {
       html,
     );
 
-    res.json({ token });
+    res
+      .status(200)
+      .json({ msg: 'A new confirmation link has been sent. Please, check your email' });
   } catch (err) {
     console.error(err.message);
     if (err.kind === 'ObjectId') {
       return res.status(404).json({ msg: 'User not found' });
     }
-    // if (err.name == 'jwt expired') {
-    //   return res.status(404).json({ msg: 'Activation link has expired!' });
-    // }
+    if (err.name === 'TokenExpiredError') {
+      return res.status(404).json({ msg: 'Activation link has expired!' });
+    }
     res.status(500).json({ msg: 'Server Error' });
   }
 };

@@ -83,17 +83,14 @@ export const confirmAccount = verifyToken => async dispatch => {
 
     dispatch({
       type: ACCOUNT_CONFIRMED,
-      payload: res.data,
+      payload: res.data.msg,
     });
   } catch (err) {
-    const errors = err.response.data.errors;
-
-    if (errors) {
-      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
-    }
+    console.error(err);
 
     dispatch({
       type: ACCOUNT_NOT_CONFIRMED,
+      payload: err.response.data.msg,
     });
   }
 };

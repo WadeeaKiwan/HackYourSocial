@@ -1,32 +1,85 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Link, withRouter } from 'react-router-dom';
-import { confirmAccount } from '../../actions/auth';
+import { confirmAccount, resendConfirmation } from '../../actions/auth';
 
-const AccountConfirmed = ({ confirmAccount, match }) => {
+const AccountConfirmed = ({
+  confirmAccount,
+  resendConfirmation,
+  match,
+  auth: {
+    verification: { msg, verify },
+  },
+}) => {
   useEffect(() => {
     confirmAccount(match.params.token);
-  }, [confirmAccount, match.params.token]);
+  }, [match.params.token, confirmAccount]);
+
+  const [displayResend, toggleResend] = useState(false);
+
+  const [emailResend, setEmailResend] = useState('');
+
+  const onChange = e => setEmailResend(([e.target.name] = e.target.value));
+
+  const resendEmailSubmit = e => {
+    e.preventDefault();
+    resendConfirmation(emailResend);
+    setEmailResend('');
+  };
 
   return (
     <Fragment>
-      <h1 className='large text-primary'>Your account has been confirmed!</h1>
-      <p className='lead'>
-        You can now{' '}
-        <Link to='/login' className='btn btn-primary'>
-          Sign In
-        </Link>
-      </p>
+      {verify && (
+        <Fragment>
+          <h1 className='large text-primary'>{msg}</h1>
+          <Link to='/login' className='btn btn-primary'>
+            Sign in
+          </Link>
+          <p className='my-1'>Your are now an official member of hack your social network </p>
+        </Fragment>
+      )}
+      {!verify && (
+        <Fragment>
+          <h1 className='large alert-danger'>{msg}</h1>
+          {!displayResend && (
+            <button onClick={() => toggleResend(!displayResend)} className='btn btn-primary'>
+              Resend Confirmation Link
+            </button>
+          )}
+          {displayResend && (
+            <form className='form my-1' onSubmit={e => resendEmailSubmit(e)}>
+              <input
+                type='email'
+                placeholder='Email Address'
+                name='emailResend'
+                value={emailResend}
+                onChange={e => onChange(e)}
+                required
+              />
+              <input type='submit' className='btn btn-primary my-1' value='Resend' />
+              <button onClick={() => toggleResend(false)} className='btn btn-light my-1'>
+                Cancel
+              </button>
+            </form>
+          )}
+        </Fragment>
+      )}
     </Fragment>
   );
 };
 
 AccountConfirmed.propTypes = {
   confirmAccount: PropTypes.func.isRequired,
+  resendConfirmation: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
 };
 
+const mapStateToProps = state => ({
+  auth: state.auth,
+});
+
 export default connect(
-  null,
-  { confirmAccount },
+  mapStateToProps,
+  { confirmAccount, resendConfirmation },
 )(withRouter(AccountConfirmed));

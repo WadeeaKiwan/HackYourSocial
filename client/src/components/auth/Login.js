@@ -62,7 +62,11 @@ const Login = ({ login, resendConfirmation, isAuthenticated }) => {
       </p>
       <p className='my-1'>
         Didn't receive a confirmation link?{' '}
-        {!displayResend && <Link onClick={() => toggleResend(!displayResend)}>Resend</Link>}
+        {!displayResend && (
+          <a href='#' onClick={() => toggleResend(!displayResend)}>
+            Resend
+          </a>
+        )}
       </p>
 
       {displayResend && (

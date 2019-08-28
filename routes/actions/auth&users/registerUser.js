@@ -46,10 +46,9 @@ const registerUser = async (req, res) => {
         id: user.id,
       },
     };
-    console.log('payload', payload);
-    const token = await jwt.sign(payload, config.get('jwtSecret'));
-    console.log('token', token);
-    console.log('type of token', typeof token);
+
+    const token = await jwt.sign(payload, config.get('jwtSecret'), { expiresIn: '15m' });
+
     // Check if not token
     if (!token) {
       return res.status(401).json({ msg: 'No token, authorization denied' });
@@ -57,14 +56,48 @@ const registerUser = async (req, res) => {
 
     // Email body
     const html = `
-          Hi ${name},
-          <br/><br/>
-          Thanks for your registration!
-          <br/><br/>
-          Please verify your account by clicking the following link:
-          <a href="https://confirm-email.herokuapp.com/verify/${token}">Here</a>
-          <br/><br/>
-          Thanks, Hack Your Social Team
+          <style>
+            .container {
+              margin: auto;
+              overflow: hidden;
+              padding: 0 2rem;
+              font-family: 'Comic Sans MS', sans-serif;
+              font-size: 1rem;
+              line-height: 1.6;
+            }
+            .large {
+              font-size: 2rem;
+              line-height: 1.2;
+              margin-bottom: 1rem;
+              color: blue;
+            }
+            .p {
+              padding: 0.5rem;
+            }
+            .my-1 {
+              margin: 1rem 0;
+            }
+            .lead {
+              font-size: 1.5rem;
+              margin-bottom: 1rem;
+            }
+          </style>
+          <body class="container">
+            <h1>
+              Hi ${name},
+            </h1>
+            <p class="p large">
+              Thanks for your registration!
+            </p>
+            <p class="p lead">Please verify your account by clicking: 
+              <a href="https://confirm-email.herokuapp.com//verify/${token}">
+                Here
+              </a>
+            </p>
+            <p class="p lead">
+              Thanks, Hack Your Social Team
+            </p>
+          </body>
     `;
 
     // Send the email

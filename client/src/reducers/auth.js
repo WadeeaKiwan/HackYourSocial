@@ -19,6 +19,7 @@ const initialState = {
   active: false,
   loading: true,
   user: null,
+  verification: {},
 };
 
 export default function(state = initialState, action) {
@@ -28,6 +29,7 @@ export default function(state = initialState, action) {
     case USER_LOADED:
       return {
         ...state,
+        active: true,
         isAuthenticated: true,
         loading: false,
         user: payload,
@@ -44,7 +46,7 @@ export default function(state = initialState, action) {
     case ACCOUNT_CONFIRMED:
       return {
         ...state,
-        ...payload,
+        verification: { msg: payload, verify: true },
         isAuthenticated: false,
         loading: false,
         active: true,
@@ -52,6 +54,7 @@ export default function(state = initialState, action) {
     case ACCOUNT_NOT_CONFIRMED:
       return {
         ...state,
+        verification: { msg: payload, verify: false },
         isAuthenticated: false,
         loading: false,
         active: false,
@@ -63,6 +66,7 @@ export default function(state = initialState, action) {
         ...payload,
         isAuthenticated: true,
         loading: false,
+        active: true,
       };
     case REGISTER_FAIL:
     case AUTH_ERROR:
@@ -76,6 +80,7 @@ export default function(state = initialState, action) {
         token: null,
         isAuthenticated: false,
         loading: false,
+        active: false,
       };
     default:
       return state;
