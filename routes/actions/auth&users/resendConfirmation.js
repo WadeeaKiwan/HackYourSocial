@@ -92,7 +92,9 @@ const resendConfirmation = async (req, res) => {
       html,
     );
 
-    res.json({ msg: 'A new confirmation link has been sent. Please, check your email' });
+    res
+      .status(200)
+      .json({ msg: 'A new confirmation link has been sent. Please, check your email' });
   } catch (err) {
     console.error(err.message);
     if (err.kind === 'ObjectId') {
