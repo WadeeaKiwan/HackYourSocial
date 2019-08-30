@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { confirmAccount, resendConfirmation } from '../../actions/auth';
 import Spinner from '../layout/Spinner';
-import './AccountConfirmation';
+import './AccountConfirmation.css';
 
 const AccountConfirmation = ({
   confirmAccount,
