@@ -47,7 +47,7 @@ const registerUser = async (req, res) => {
       },
     };
 
-    const token = await jwt.sign(payload, config.get('jwtSecret'), { expiresIn: '15m' });
+    const token = await jwt.sign(payload, config.get('jwtSecret'), { expiresIn: '1h' });
 
     // Check if not token
     if (!token) {
@@ -61,7 +61,7 @@ const registerUser = async (req, res) => {
               margin: auto;
               overflow: hidden;
               padding: 0 2rem;
-              font-family: 'Comic Sans MS', sans-serif;
+              font-family: 'Georgia', sans-serif;
               font-size: 1rem;
               line-height: 1.6;
             }
@@ -111,7 +111,7 @@ const registerUser = async (req, res) => {
     res.json({ msg: 'You are registered! Please, visit your email to confirm your account' });
   } catch (err) {
     console.error(err.message);
-    res.status(500).json({ msg: 'Server error' });
+    res.status(500).send('Server Error');
   }
 };
 

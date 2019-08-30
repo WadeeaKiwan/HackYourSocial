@@ -27,7 +27,7 @@ const emailConfirmation = async (req, res) => {
             margin: auto;
             overflow: hidden;
             padding: 0 2rem;
-            font-family: 'Comic Sans MS', sans-serif;
+            font-family: 'Georgia', sans-serif;
             font-size: 1rem;
             line-height: 1.6;
           }
@@ -78,7 +78,7 @@ const emailConfirmation = async (req, res) => {
     if (err.name === 'TokenExpiredError') {
       return res.status(404).json({ msg: 'Activation link has expired!' });
     }
-    res.status(500).json({ msg: 'Server Error' });
+    res.status(500).send('Server Error');
   }
 };
 

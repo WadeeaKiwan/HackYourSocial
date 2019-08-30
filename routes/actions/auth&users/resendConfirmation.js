@@ -48,7 +48,7 @@ const resendConfirmation = async (req, res) => {
               margin: auto;
               overflow: hidden;
               padding: 0 2rem;
-              font-family: 'Comic Sans MS', sans-serif;
+              font-family: 'Georgia', sans-serif;
               font-size: 1rem;
               line-height: 1.6;
             }
@@ -100,7 +100,7 @@ const resendConfirmation = async (req, res) => {
     if (err.kind === 'ObjectId') {
       return res.status(404).json({ msg: 'User not found' });
     }
-    res.status(500).json({ msg: 'Server Error' });
+    res.status(500).send('Server Error');
   }
 };
 

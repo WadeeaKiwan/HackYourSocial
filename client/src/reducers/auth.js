@@ -19,7 +19,7 @@ const initialState = {
   active: false,
   loading: true,
   user: null,
-  verification: {},
+  verification: { msg: null, verify: null },
 };
 
 export default function(state = initialState, action) {
