@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { confirmAccount, resendConfirmation } from '../../actions/auth';
 import Spinner from '../layout/Spinner';
+import './AccountConfirmation';
 
 const AccountConfirmation = ({
   confirmAccount,
@@ -42,7 +43,7 @@ const AccountConfirmation = ({
     </Fragment>
   ) : (
     <Fragment>
-      <h1 className='large alert-danger'>{msg}</h1>
+      <h1 className='large text-danger'>{msg}</h1>
       {!displayResend && (
         <button onClick={() => toggleResend(!displayResend)} className='btn btn-primary'>
           Resend Confirmation Link
