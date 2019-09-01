@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { confirmAccount, resendConfirmation } from '../../actions/auth';
 import Spinner from '../layout/Spinner';
-import './AccountConfirmation.css';
 
 const AccountConfirmation = ({
   confirmAccount,
@@ -36,10 +35,10 @@ const AccountConfirmation = ({
   ) : verify ? (
     <Fragment>
       <h1 className='large text-primary'>{msg}</h1>
+      <p className='lead my-1'>Your are now an official member of hack your social network </p>
       <Link to='/login' className='btn btn-primary'>
         Sign in
       </Link>
-      <p className='my-1'>Your are now an official member of hack your social network </p>
     </Fragment>
   ) : (
     <Fragment>
