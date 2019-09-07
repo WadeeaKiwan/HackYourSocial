@@ -9,7 +9,7 @@ const emailConfirmation = async (req, res) => {
   const { token } = req.params;
 
   try {
-    const decoded = await jwt.verify(token, config.get('jwtSecret'));
+    const decoded = await jwt.verify(token, config.get('ConfirmationSecret'));
 
     let user = await User.findById({ _id: decoded.user.id }).select('-password');
 

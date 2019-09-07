@@ -69,17 +69,17 @@ export const register = ({ name, email, password }) => async dispatch => {
 };
 
 // Confirm User
-export const confirmAccount = verifyToken => async dispatch => {
+export const confirmAccount = confirmationToken => async dispatch => {
   const config = {
     headers: {
       'Content-Type': 'application/json',
     },
   };
 
-  const body = JSON.stringify({ verifyToken });
+  const body = JSON.stringify({ confirmationToken });
 
   try {
-    const res = await axios.post(`/api/users/verify/${verifyToken}`, body, config);
+    const res = await axios.post(`/api/users/verify/${confirmationToken}`, body, config);
 
     dispatch({
       type: ACCOUNT_CONFIRMED,

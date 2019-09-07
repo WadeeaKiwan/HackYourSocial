@@ -34,10 +34,10 @@ const resendConfirmation = async (req, res) => {
       },
     };
 
-    const token = await jwt.sign(payload, config.get('jwtSecret'), { expiresIn: '1h' });
+    const confirmationToken = await jwt.sign(payload, config.get('jwtSecret'), { expiresIn: '1h' });
 
     // Check if not token
-    if (!token) {
+    if (!confirmationToken) {
       return res.status(401).json({ msg: 'No token, authorization denied' });
     }
 
@@ -74,7 +74,7 @@ const resendConfirmation = async (req, res) => {
               Hi ${user.name},
             </h1>
             <p class="p lead">Please verify your account by clicking: 
-              <a href="https://confirm-email.herokuapp.com/verify/${token}">
+              <a href="https://confirm-email.herokuapp.com/verify/${confirmationToken}">
                 Here
               </a>
             </p>
